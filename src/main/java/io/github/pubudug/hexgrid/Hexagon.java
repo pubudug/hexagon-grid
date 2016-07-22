@@ -20,15 +20,15 @@ public class Hexagon extends Coordinate {
         return new Point(x, y);
     }
 
-    Point getCorner(int corner) {
-        double angle = Math.toRadians(60 * corner);
+    Point getCorner(Corner corner) {
+        double angle = Math.toRadians(60 * corner.getId());
         Point c = getCenter();
         return new Point(c.getX() + size * cos(angle), c.getY() + size * sin(angle));
     }
 
     protected List<Point> getCorners() {
         List<Point> corners = new LinkedList<>();
-        for (int corner = 0; corner < 6; corner++) {
+        for (Corner corner : Corner.values()) {
             corners.add(getCorner(corner));
         }
         return corners;
