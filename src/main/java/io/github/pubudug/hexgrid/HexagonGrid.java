@@ -1,19 +1,19 @@
 package io.github.pubudug.hexgrid;
 
-import java.util.Arrays;
+import static java.lang.Math.abs;
+import static java.lang.Math.round;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import static java.lang.Math.round;
-import static java.lang.Math.abs;
 
-public class Grid<T extends Hexagon> {
+public class HexagonGrid<T extends Hexagon> {
 
     private T[][] hexagons;
     private Map<T, T> hexagonMap;
     private int size;
 
-    Grid(HexagonFactory<T> hexagonFactory, int columns, int rows, int size) {
+    protected HexagonGrid(HexagonFactory<T> hexagonFactory, int columns, int rows, int size) {
         this.hexagonMap = new HashMap<>();
         this.hexagons = hexagonFactory.createArray(columns, rows);
         this.size = size;
@@ -54,7 +54,7 @@ public class Grid<T extends Hexagon> {
         return Coordinate.fromCubeCoordinates((int) rx, (int) ry, (int) rz);
     }
 
-    Collection<T> getHexagons() {
+    protected Collection<T> getHexagons() {
         return this.hexagonMap.values();
     }
 }

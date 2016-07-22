@@ -9,7 +9,7 @@ import java.util.List;
 public class Hexagon extends Coordinate {
     private int size;
 
-    Hexagon(Coordinate coordinate, int size) {
+    protected Hexagon(Coordinate coordinate, int size) {
         super(coordinate);
         this.size = size;
     }
@@ -26,7 +26,7 @@ public class Hexagon extends Coordinate {
         return new Point(c.getX() + size * cos(angle), c.getY() + size * sin(angle));
     }
 
-    List<Point> getCorners() {
+    protected List<Point> getCorners() {
         List<Point> corners = new LinkedList<>();
         for (int corner = 0; corner < 6; corner++) {
             corners.add(getCorner(corner));
