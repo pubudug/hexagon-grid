@@ -12,15 +12,11 @@ public class HexagonGrid<T extends Hexagon> {
     private T[][] hexagons;
     private Map<T, T> hexagonMap;
     private int size;
-    private int columns;
-    private int rows;
 
     protected HexagonGrid(HexagonFactory<T> hexagonFactory, int columns, int rows, int size) {
         this.hexagonMap = new HashMap<>();
         this.hexagons = hexagonFactory.createArray(columns, rows);
         this.size = size;
-        this.columns = columns;
-        this.rows = rows;
         for (int column = 0; column < columns; column++) {
             for (int row = 0; row < rows; row++) {
                 Coordinate c = Coordinate.fromOffsetCoordinates(column, row);
@@ -31,7 +27,7 @@ public class HexagonGrid<T extends Hexagon> {
         }
     }
 
-    Hexagon getHexagonContainingPixel(int x, int y) {
+    protected T getHexagonContainingPixel(int x, int y) {
         double cubeX = (double) x * 2 / 3 / size;
         double cubeZ = (-x / 3 + Math.sqrt(3) / 3 * y) / size;
         Coordinate coordinate = roundToCubeCoordinate(cubeX, -cubeX - cubeZ, cubeZ);
@@ -62,18 +58,8 @@ public class HexagonGrid<T extends Hexagon> {
         return this.hexagonMap.values();
     }
 
-    public int getPixelWidth() {
-        double leftMostConrer = hexagons[0][0].getCorner(Corner.LEFT).getX();
-        int rightMostHexRow = rows > 1 ? 1 : 0;
-        double rightMostCorner = hexagons[columns - 1][rightMostHexRow].getCorner(Corner.RIGHT).getX();
-        return (int) (rightMostCorner - leftMostConrer);
+    public T getHexagon(int column, int row) {
+        return hexagons[column][row];
     }
 
-    public int getPixelHeight() {
-        double topMostCorner = hexagons[0][0].getCorner(Corner.NORTHEAST).getY();
-        int bottomMostHexagonColumn = columns > 1 ? 1 : 0;
-        hexagons[bottomMostHexagonColumn][rows-1].getCorners();
-        double bottomMostCorner = hexagons[bottomMostHexagonColumn][rows-1].getCorner(Corner.SOUTHEAST).getY();
-        return (int) (bottomMostCorner-topMostCorner);
-    }
 }

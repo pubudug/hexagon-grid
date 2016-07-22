@@ -6,6 +6,9 @@ import static java.lang.Math.sin;
 import java.util.LinkedList;
 import java.util.List;
 
+import lombok.Getter;
+
+@Getter
 public class Hexagon extends Coordinate {
     private int size;
 
@@ -14,7 +17,7 @@ public class Hexagon extends Coordinate {
         this.size = size;
     }
 
-    Point getCenter() {
+    public Point getCenter() {
         double x = (double) size * 3 / 2 * getCubeX();
         double y = size * Math.sqrt(3) * (getCubeZ() + (double) getCubeX() / 2);
         return new Point(x, y);
