@@ -44,7 +44,11 @@ public class Coordinate {
         return -cubeX - cubeZ;
     }
 
-    int getOffsetCoordinateRow() {
+    public int getOffsetCoordinateColumn() {
+        return cubeX;
+    }
+
+    public int getOffsetCoordinateRow() {
         return cubeZ + (cubeX - (cubeX & 1)) / 2;
     }
 
