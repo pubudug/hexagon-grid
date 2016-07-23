@@ -2,10 +2,10 @@ package io.github.pubudug.hexgrid;
 
 import static io.github.pubudug.hexgrid.TerrainType.*;
 
-public class HumanHexagonAttributes implements HexagonAttributes<TestHexagon> {
+public class HumanHexagonAttributes<H extends TestHexagon> implements HexagonAttributes<H> {
 
     @Override
-    public int getMovementCost(TestHexagon hexagon) {
+    public int getMovementCost(H hexagon) {
         if (TREES.equals(hexagon.getTerrainType())) {
             return 2;
         } else if (WATER.equals(hexagon.getTerrainType())) {

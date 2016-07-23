@@ -62,7 +62,7 @@ public class ShortestPathCalculatorTest {
     @Test(dataProvider = "humanPathDataProvider")
     public void testHumanPath(int fromColumn, int fromRow, int toColumn, int toRow, List<Coordinate> expected) {
         ShortestPathCalculator<TestHexagon> calculator = new ShortestPathCalculator<TestHexagon>(grid,
-                new HumanHexagonAttributes());
+                new HumanHexagonAttributes<TestHexagon>());
         List<TestHexagon> path = calculator.findShortestPath(grid.getHexagon(fromColumn, fromRow),
                 grid.getHexagon(toColumn, toRow));
         Assert.assertEquals(path, expected);

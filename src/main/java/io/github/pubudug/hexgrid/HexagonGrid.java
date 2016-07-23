@@ -26,7 +26,7 @@ public class HexagonGrid<T extends Hexagon> {
         }
     }
 
-    protected T getHexagonContainingPixel(int x, int y) {
+    public T getHexagonContainingPixel(int x, int y) {
         double cubeX = (double) x * 2 / 3 / size;
         double cubeZ = (-x / 3 + Math.sqrt(3) / 3 * y) / size;
         Coordinate coordinate = Coordinate.roundToCubeCoordinate(cubeX, -cubeX - cubeZ, cubeZ);
