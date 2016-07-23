@@ -30,28 +30,8 @@ public class HexagonGrid<T extends Hexagon> {
     protected T getHexagonContainingPixel(int x, int y) {
         double cubeX = (double) x * 2 / 3 / size;
         double cubeZ = (-x / 3 + Math.sqrt(3) / 3 * y) / size;
-        Coordinate coordinate = roundToCubeCoordinate(cubeX, -cubeX - cubeZ, cubeZ);
+        Coordinate coordinate = Coordinate.roundToCubeCoordinate(cubeX, -cubeX - cubeZ, cubeZ);
         return hexagonMap.get(coordinate);
-    }
-
-    private Coordinate roundToCubeCoordinate(double x, double y, double z) {
-        long rx = round(x);
-        long ry = round(y);
-        long rz = round(z);
-
-        double xDiff = abs(rx - x);
-        double yDiff = abs(ry - y);
-        double zDiff = abs(rz - z);
-
-        if (xDiff > yDiff && xDiff > zDiff) {
-            rx = -ry - rz;
-        } else if (yDiff > zDiff) {
-            ry = -rx - rz;
-        } else {
-            rz = -rx - ry;
-        }
-
-        return Coordinate.fromCubeCoordinates((int) rx, (int) ry, (int) rz);
     }
 
     protected Collection<T> getHexagons() {

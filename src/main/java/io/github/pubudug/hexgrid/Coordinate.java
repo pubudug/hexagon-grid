@@ -6,6 +6,10 @@ import lombok.Getter;
 import lombok.ToString;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.round;
+
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @Getter(value = AccessLevel.PROTECTED)
 @EqualsAndHashCode
@@ -36,6 +40,26 @@ public class Coordinate {
         return new Coordinate(cubeX, cubeY, cubeZ);
     }
 
+    static Coordinate roundToCubeCoordinate(double x, double y, double z) {
+        long rx = round(x);
+        long ry = round(y);
+        long rz = round(z);
+
+        double xDiff = abs(rx - x);
+        double yDiff = abs(ry - y);
+        double zDiff = abs(rz - z);
+
+        if (xDiff > yDiff && xDiff > zDiff) {
+            rx = -ry - rz;
+        } else if (yDiff > zDiff) {
+            ry = -rx - rz;
+        } else {
+            rz = -rx - ry;
+        }
+
+        return fromCubeCoordinates((int) rx, (int) ry, (int) rz);
+    }
+
     static Coordinate fromOffsetCoordinates(int offsetColumn, int offsetRow) {
         return new Coordinate(offsetColumn, offsetRow);
     }
@@ -52,7 +76,7 @@ public class Coordinate {
         return cubeZ + (cubeX - (cubeX & 1)) / 2;
     }
 
-    int disntaceTo(Coordinate other) {
+    int distanceTo(Coordinate other) {
         return subtract(other).length();
     }
 
@@ -70,5 +94,25 @@ public class Coordinate {
 
     Coordinate getNeighbour(Direction direction) {
         return this.add(direction.getCoordinate());
+    }
+
+    Stream<Coordinate> drawLine(Coordinate to) {
+        int distance = distanceTo(to);
+        if (distance == 0) {
+            return Stream.empty();
+        }
+        return IntStream.range(0, distance + 1).mapToObj(i -> Integer.valueOf(i)).map(i -> {
+            return cubeLinearInterpolate(to, 1.0 * i / distance);
+        });
+    }
+
+    private Coordinate cubeLinearInterpolate(Coordinate to, double sample) {
+        return roundToCubeCoordinate(linearInterpolate(getCubeX(), to.getCubeX(), sample),
+                linearInterpolate(getCubeY(), to.getCubeY(), sample),
+                linearInterpolate(getCubeZ(), to.getCubeZ(), sample));
+    }
+
+    private double linearInterpolate(int from, int to, double sample) {
+        return from + (to - from) * sample;
     }
 }
