@@ -10,3 +10,5 @@ A work in progress inspired by these [tutorials](http://www.redblobgames.com/gri
 - This library supports only rectangular grids
 
 - offset coordinates are [odd-q](http://www.redblobgames.com/grids/hexagons/#coordinates)
+
+If you find any features missing, you should probably look at [hexameter](https://github.com/Hexworks/hexameter)

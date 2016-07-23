@@ -1,11 +1,10 @@
 package io.github.pubudug.hexgrid;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.round;
-
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class HexagonGrid<T extends Hexagon> {
 
@@ -40,6 +39,21 @@ public class HexagonGrid<T extends Hexagon> {
 
     public T getHexagon(int column, int row) {
         return hexagons[column][row];
+    }
+
+    public Set<T> getNeighborsOf(T hexagon) {
+        Set<Coordinate> neighbourCoordinates = hexagon.getNeighbours();
+        Set<T> neighbours = new HashSet<>();
+        for (Coordinate coordinate : neighbourCoordinates) {
+            if (hexagonMap.containsKey(coordinate)) {
+                neighbours.add(hexagonMap.get(coordinate));
+            }
+        }
+        return neighbours;
+    }
+
+    public T getHexagon(Coordinate coordinate) {
+        return this.getHexagon(coordinate.getOffsetCoordinateColumn(), coordinate.getOffsetCoordinateRow());
     }
 
 }

@@ -8,6 +8,8 @@ import lombok.ToString;
 import static java.lang.Math.abs;
 import static java.lang.Math.round;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -94,6 +96,15 @@ public class Coordinate {
 
     Coordinate getNeighbour(Direction direction) {
         return this.add(direction.getCoordinate());
+    }
+
+    Set<Coordinate> getNeighbours() {
+        Set<Coordinate> neighbours = new HashSet<>();
+        Direction[] directions = Direction.values();
+        for (Direction direction : directions) {
+            neighbours.add(getNeighbour(direction));
+        }
+        return neighbours;
     }
 
     Stream<Coordinate> drawLine(Coordinate to) {

@@ -1,6 +1,7 @@
 .classpath
 .project
 .settings
+test-output
 
 *.class
 
