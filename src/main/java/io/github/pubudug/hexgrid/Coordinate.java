@@ -15,7 +15,6 @@ import java.util.stream.Stream;
 
 @Getter(value = AccessLevel.PROTECTED)
 @EqualsAndHashCode
-@ToString
 public class Coordinate {
     private int cubeX;
     private int cubeZ;
@@ -125,5 +124,10 @@ public class Coordinate {
 
     private double linearInterpolate(int from, int to, double sample) {
         return from + (to - from) * sample;
+    }
+
+    @Override
+    public String toString() {
+        return "Column : " + getOffsetCoordinateColumn() + " Row: " + getOffsetCoordinateRow();
     }
 }

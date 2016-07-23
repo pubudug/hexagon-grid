@@ -53,18 +53,18 @@ public class ShortestPathCalculator<T extends Hexagon> {
                 }
             }
         }
-        return backtrackShortestPath(to, cameFrom);
+        return backtrackShortestPath(from, to, cameFrom);
     }
 
     protected int heuristic(T from, T to) {
         return from.distanceTo(to);
     }
 
-    private List<T> backtrackShortestPath(T to, Map<T, T> cameFrom) {
+    private List<T> backtrackShortestPath(T from, T to, Map<T, T> cameFrom) {
         List<T> result = new LinkedList<>();
         result.add(to);
         T previous = to;
-        while (cameFrom.get(previous) != null) {
+        while (!cameFrom.get(previous).equals(from)) {
             result.add(cameFrom.get(previous));
             previous = cameFrom.get(previous);
         }
