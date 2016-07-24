@@ -11,4 +11,6 @@ A work in progress inspired by these [tutorials](http://www.redblobgames.com/gri
 
 - offset coordinates are [odd-q](http://www.redblobgames.com/grids/hexagons/#coordinates)
 
+- [Demo project](https://github.com/pubudug/hexagon-grid-demo)
+
 If you find any features missing, you should probably look at [hexameter](https://github.com/Hexworks/hexameter)
