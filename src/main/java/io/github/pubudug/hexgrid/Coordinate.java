@@ -3,10 +3,11 @@ package io.github.pubudug.hexgrid;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.round;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -90,7 +91,7 @@ public class Coordinate {
     }
 
     private int length() {
-        return (abs(cubeX) + abs(getCubeY()) + (cubeZ)) / 2;
+        return (abs(cubeX) + abs(getCubeY()) + abs(cubeZ)) / 2;
     }
 
     Coordinate getNeighbour(Direction direction) {
@@ -106,13 +107,13 @@ public class Coordinate {
         return neighbours;
     }
 
-    Stream<Coordinate> drawLine(Coordinate to) {
-        int distance = distanceTo(to);
+    Stream<Coordinate> drawLine(Coordinate toExcluded) {
+        int distance = distanceTo(toExcluded);
         if (distance == 0) {
             return Stream.empty();
         }
-        return IntStream.range(0, distance + 1).mapToObj(i -> Integer.valueOf(i)).map(i -> {
-            return cubeLinearInterpolate(to, 1.0 * i / distance);
+        return IntStream.range(1, distance).mapToObj(i -> Integer.valueOf(i)).map(i -> {
+            return cubeLinearInterpolate(toExcluded, 1.0 * i / distance);
         });
     }
 
@@ -129,5 +130,16 @@ public class Coordinate {
     @Override
     public String toString() {
         return "Column : " + getOffsetCoordinateColumn() + " Row: " + getOffsetCoordinateRow();
+    }
+
+    public Set<Coordinate> getWithinRange(int range) {
+        Set<Coordinate> withinRange = new HashSet<>();
+        for (int dx = -range; dx <= range; dx++) {
+            for (int dy = max(-range, -dx - range); dy <= min(range, -dx + range); dy++) {
+                int dz = -dx - dy;
+                withinRange.add(this.add(fromCubeCoordinates(dx, dy, dz)));
+            }
+        }
+        return withinRange;
     }
 }

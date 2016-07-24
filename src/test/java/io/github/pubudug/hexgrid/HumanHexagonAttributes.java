@@ -19,4 +19,9 @@ public class HumanHexagonAttributes<H extends TestHexagon> implements HexagonAtt
         }
     }
 
+    @Override
+    public boolean blocksView(H hexagon) {
+        return HILLS.equals(hexagon.getTerrainType()) || TREES.equals(hexagon.getTerrainType());
+    }
+
 }

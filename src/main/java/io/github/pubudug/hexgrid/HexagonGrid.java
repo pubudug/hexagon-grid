@@ -56,4 +56,15 @@ public class HexagonGrid<T extends Hexagon> {
         return this.getHexagon(coordinate.getOffsetCoordinateColumn(), coordinate.getOffsetCoordinateRow());
     }
 
+    public Set<T> getHexagonsWithinRange(Hexagon hexagon, int range) {
+        Set<Coordinate> withinRange = hexagon.getWithinRange(range);
+        Set<T> hexagonsWithinRange = new HashSet<>();
+        for (Coordinate coordinate : withinRange) {
+            if (hexagonMap.containsKey(coordinate)) {
+                hexagonsWithinRange.add(hexagonMap.get(coordinate));
+            }
+        }
+        return hexagonsWithinRange;
+    }
+
 }
