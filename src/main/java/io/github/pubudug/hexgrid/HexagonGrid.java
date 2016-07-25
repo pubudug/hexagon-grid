@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class HexagonGrid<T extends Hexagon> {
@@ -11,10 +12,14 @@ public class HexagonGrid<T extends Hexagon> {
     private T[][] hexagons;
     private Map<T, T> hexagonMap;
     private int size;
+    private int columns;
+    private int rows;
 
     protected HexagonGrid(HexagonFactory<T> hexagonFactory, int columns, int rows, int size) {
         this.hexagonMap = new HashMap<>();
         this.hexagons = hexagonFactory.createArray(columns, rows);
+        this.columns = columns;
+        this.rows = rows;
         this.size = size;
         for (int column = 0; column < columns; column++) {
             for (int row = 0; row < rows; row++) {
@@ -52,8 +57,13 @@ public class HexagonGrid<T extends Hexagon> {
         return neighbours;
     }
 
-    public T getHexagon(Coordinate coordinate) {
-        return this.getHexagon(coordinate.getOffsetCoordinateColumn(), coordinate.getOffsetCoordinateRow());
+    public Optional<T> getHexagon(Coordinate c) {
+        if (c.getOffsetCoordinateColumn() >= 0 && c.getOffsetCoordinateColumn() < columns
+                && c.getOffsetCoordinateRow() >= 0 && c.getOffsetCoordinateRow() < rows) {
+            return Optional.of(this.getHexagon(c.getOffsetCoordinateColumn(), c.getOffsetCoordinateRow()));
+        } else {
+            return Optional.empty();
+        }
     }
 
     public Set<T> getHexagonsWithinRange(Hexagon hexagon, int range) {

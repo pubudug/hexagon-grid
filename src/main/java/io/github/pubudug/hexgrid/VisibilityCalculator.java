@@ -22,7 +22,8 @@ public class VisibilityCalculator<T extends Hexagon> {
         Set<T> withinRange = grid.getHexagonsWithinRange(hexagon, range);
         for (T hex : withinRange) {
             Stream<Coordinate> line = hexagon.drawLine(hex);
-            if (!line.anyMatch(c -> hexagonAttributes.blocksView(grid.getHexagon(c)))) {
+            if (!line.anyMatch(
+                    c -> !grid.getHexagon(c).isPresent() || hexagonAttributes.blocksView(grid.getHexagon(c).get()))) {
                 visibleHexagons.add(hex);
             }
         }
