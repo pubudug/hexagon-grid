@@ -9,6 +9,7 @@ import static java.lang.Math.round;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -107,23 +108,30 @@ public class Coordinate {
         return neighbours;
     }
 
-    Stream<Coordinate> drawLine(Coordinate toExcluded) {
+    Stream<Stream<Coordinate>> drawLine(Coordinate toExcluded) {
         int distance = distanceTo(toExcluded);
         if (distance == 0) {
             return Stream.empty();
         }
-        return IntStream.range(1, distance).mapToObj(i -> Integer.valueOf(i)).map(i -> {
-            return cubeLinearInterpolate(toExcluded, 1.0 * i / distance);
+        double f = 0.01;
+        //rather than drawing a line to a center, we draw lines to 3 points around the center,
+        //because there are some situations where 2 hexagons match, but rounding chooses only
+        //a single hexagon
+        double[][] tieBreaker = new double[][] { { f, 0, -f }, { 0, -f, f }, { -f, f, 0 } };
+        return Arrays.stream(tieBreaker).map(arr -> {
+            return IntStream.range(1, distance).mapToObj(i -> Integer.valueOf(i)).map(i -> {
+                return cubeLinearInterpolate(toExcluded.getCubeX() + arr[0], toExcluded.getCubeY() + arr[1],
+                        toExcluded.getCubeZ() + arr[2], 1.0 * i / distance);
+            });
         });
     }
 
-    private Coordinate cubeLinearInterpolate(Coordinate to, double sample) {
-        return roundToCubeCoordinate(linearInterpolate(getCubeX(), to.getCubeX(), sample),
-                linearInterpolate(getCubeY(), to.getCubeY(), sample),
-                linearInterpolate(getCubeZ(), to.getCubeZ(), sample));
+    private Coordinate cubeLinearInterpolate(double toX, double toY, double toZ, double sample) {
+        return roundToCubeCoordinate(linearInterpolate(getCubeX(), toX, sample),
+                linearInterpolate(getCubeY(), toY, sample), linearInterpolate(getCubeZ(), toZ, sample));
     }
 
-    private double linearInterpolate(int from, int to, double sample) {
+    private double linearInterpolate(int from, double to, double sample) {
         return from + (to - from) * sample;
     }
 
