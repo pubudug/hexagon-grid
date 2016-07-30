@@ -1,16 +1,14 @@
 package io.github.pubudug.hexgrid;
 
-public class TestHexagon extends Hexagon {
-
+public class TestCoordinate extends Coordinate {
     private TerrainType type;
 
-    protected TestHexagon(Coordinate coordinate, int size, TerrainType terrainType) {
-        super(coordinate, size);
+    public TestCoordinate(Coordinate coordinate, TerrainType terrainType) {
+        super(coordinate);
         this.type = terrainType;
     }
 
     public TerrainType getTerrainType() {
         return type;
     }
-
 }

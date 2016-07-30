@@ -9,17 +9,18 @@ import java.util.List;
 import lombok.Getter;
 
 @Getter
-public class Hexagon extends Coordinate {
+public class Hexagon<C extends Coordinate> {
     private int size;
+    private C coordinate;
 
-    protected Hexagon(Coordinate coordinate, int size) {
-        super(coordinate);
+    protected Hexagon(C coordinate, int size) {
+        this.coordinate = coordinate;
         this.size = size;
     }
 
     public Point getCenter() {
-        double x = (double) size * 3 / 2 * getCubeX();
-        double y = size * Math.sqrt(3) * (getCubeZ() + (double) getCubeX() / 2);
+        double x = (double) size * 3 / 2 * coordinate.getCubeX();
+        double y = size * Math.sqrt(3) * (coordinate.getCubeZ() + (double) coordinate.getCubeX() / 2);
         return new Point(x, y);
     }
 

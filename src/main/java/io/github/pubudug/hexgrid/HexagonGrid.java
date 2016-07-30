@@ -1,80 +1,30 @@
 package io.github.pubudug.hexgrid;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Stream;
 
-public class HexagonGrid<T extends Hexagon> {
+public class HexagonGrid<H extends Hexagon<C>, C extends Coordinate> {
 
-    private T[][] hexagons;
-    private Map<T, T> hexagonMap;
     private int size;
-    private int columns;
-    private int rows;
+    private HexagonFactory<H, C> hexagonFactory;
+    private CoordinateGrid<C> coordinateGrid;
 
-    protected HexagonGrid(HexagonFactory<T> hexagonFactory, int columns, int rows, int size) {
-        this.hexagonMap = new HashMap<>();
-        this.hexagons = hexagonFactory.createArray(columns, rows);
-        this.columns = columns;
-        this.rows = rows;
+    protected HexagonGrid(CoordinateGrid<C> coordinateGrid, HexagonFactory<H, C> hexagonFactory, int size) {
         this.size = size;
-        for (int column = 0; column < columns; column++) {
-            for (int row = 0; row < rows; row++) {
-                Coordinate c = Coordinate.fromOffsetCoordinates(column, row);
-                T hexagon = hexagonFactory.createHexagon(c, size);
-                hexagons[column][row] = hexagon;
-                hexagonMap.put(hexagon, hexagon);
-            }
-        }
+        this.hexagonFactory = hexagonFactory;
+        this.coordinateGrid = coordinateGrid;
+
     }
 
-    public T getHexagonContainingPixel(int x, int y) {
+    public H getHexagonContainingPixel(int x, int y) {
         double cubeX = (double) x * 2 / 3 / size;
         double cubeZ = (-x / 3 + Math.sqrt(3) / 3 * y) / size;
-        Coordinate coordinate = Coordinate.roundToCubeCoordinate(cubeX, -cubeX - cubeZ, cubeZ);
-        return hexagonMap.get(coordinate);
+        Coordinate c = Coordinate.roundToCubeCoordinate(cubeX, -cubeX - cubeZ, cubeZ);
+        return hexagonFactory
+                .create(coordinateGrid.getCoordinate(c.getOffsetCoordinateColumn(), c.getOffsetCoordinateRow()));
     }
 
-    protected Collection<T> getHexagons() {
-        return this.hexagonMap.values();
-    }
-
-    public T getHexagon(int column, int row) {
-        return hexagons[column][row];
-    }
-
-    public Set<T> getNeighborsOf(T hexagon) {
-        Set<Coordinate> neighbourCoordinates = hexagon.getNeighbours();
-        Set<T> neighbours = new HashSet<>();
-        for (Coordinate coordinate : neighbourCoordinates) {
-            if (hexagonMap.containsKey(coordinate)) {
-                neighbours.add(hexagonMap.get(coordinate));
-            }
-        }
-        return neighbours;
-    }
-
-    public Optional<T> getHexagon(Coordinate c) {
-        if (c.getOffsetCoordinateColumn() >= 0 && c.getOffsetCoordinateColumn() < columns
-                && c.getOffsetCoordinateRow() >= 0 && c.getOffsetCoordinateRow() < rows) {
-            return Optional.of(this.getHexagon(c.getOffsetCoordinateColumn(), c.getOffsetCoordinateRow()));
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    public Set<T> getHexagonsWithinRange(Hexagon hexagon, int range) {
-        Set<Coordinate> withinRange = hexagon.getWithinRange(range);
-        Set<T> hexagonsWithinRange = new HashSet<>();
-        for (Coordinate coordinate : withinRange) {
-            if (hexagonMap.containsKey(coordinate)) {
-                hexagonsWithinRange.add(hexagonMap.get(coordinate));
-            }
-        }
-        return hexagonsWithinRange;
+    protected Stream<H> getHexagons() {
+        return this.coordinateGrid.getCoordinates().map(c -> hexagonFactory.create(c));
     }
 
 }

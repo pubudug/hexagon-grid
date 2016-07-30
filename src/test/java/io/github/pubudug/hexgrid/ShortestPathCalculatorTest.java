@@ -11,14 +11,15 @@ import org.testng.annotations.Test;
 public class ShortestPathCalculatorTest {
 
     private TerrainMap terrainMap;
-    private TestHexagonFactory hexagonFactory;
-    private HexagonGrid<TestHexagon> grid;
+    private CoordinateGrid<TestCoordinate> grid;
+    private TestCoordinateFactory coordinateFactory;
 
     @BeforeClass
     public void intialize() {
         this.terrainMap = new TerrainMap(new HardCodedTerrainMapReader());
-        this.hexagonFactory = new TestHexagonFactory(terrainMap);
-        this.grid = new HexagonGrid<TestHexagon>(hexagonFactory, terrainMap.getColumns(), terrainMap.getRows(), 30);
+        this.coordinateFactory = new TestCoordinateFactory(terrainMap);
+        this.grid = new CoordinateGrid<TestCoordinate>(terrainMap.getColumns(), terrainMap.getRows(),
+                coordinateFactory);
     }
 
     @DataProvider
@@ -51,8 +52,8 @@ public class ShortestPathCalculatorTest {
               { 2, 5, 4, 8, 
                   Arrays.asList(
                       Coordinate.fromOffsetCoordinates(3, 5),
-                      Coordinate.fromOffsetCoordinates(4, 6),
-                      Coordinate.fromOffsetCoordinates(4, 7),
+                      Coordinate.fromOffsetCoordinates(3, 6),
+                      Coordinate.fromOffsetCoordinates(3, 7),
                       Coordinate.fromOffsetCoordinates(4, 8)),
               }, 
             };
@@ -61,10 +62,10 @@ public class ShortestPathCalculatorTest {
 
     @Test(dataProvider = "humanPathDataProvider")
     public void testHumanPath(int fromColumn, int fromRow, int toColumn, int toRow, List<Coordinate> expected) {
-        ShortestPathCalculator<TestHexagon> calculator = new ShortestPathCalculator<TestHexagon>(grid,
-                new HumanHexagonAttributes<TestHexagon>());
-        List<TestHexagon> path = calculator.findShortestPath(grid.getHexagon(fromColumn, fromRow),
-                grid.getHexagon(toColumn, toRow));
+        ShortestPathCalculator<TestCoordinate> calculator = new ShortestPathCalculator<TestCoordinate>(grid,
+                new HumanCoordinateAttributes<TestCoordinate>());
+        List<TestCoordinate> path = calculator.findShortestPath(grid.getCoordinate(fromColumn, fromRow),
+                grid.getCoordinate(toColumn, toRow));
         Assert.assertEquals(path, expected);
     }
 }

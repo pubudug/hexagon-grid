@@ -4,26 +4,26 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public class VisibilityCalculator<T extends Hexagon> {
-    private HexagonGrid<T> grid;
+public class VisibilityCalculator<C extends Coordinate> {
+    private CoordinateGrid<C> grid;
     private int range;
-    private Hexagon hexagon;
-    private HexagonAttributes<T> hexagonAttributes;
+    private CoordinateAttributes<C> coordinateAttributes;
+    private C coordinate;
 
-    public VisibilityCalculator(Hexagon from, int range, HexagonGrid<T> grid, HexagonAttributes<T> attributes) {
+    public VisibilityCalculator(C from, int range, CoordinateGrid<C> grid, CoordinateAttributes<C> attributes) {
         this.range = range;
-        this.hexagon = from;
+        this.coordinate = from;
         this.grid = grid;
-        this.hexagonAttributes = attributes;
+        this.coordinateAttributes = attributes;
     }
 
-    public Set<T> getVisibleHexagons() {
-        Set<T> visibleHexagons = new HashSet<>();
-        Set<T> withinRange = grid.getHexagonsWithinRange(hexagon, range);
-        for (T hex : withinRange) {
-            Stream<Stream<Coordinate>> lines = hexagon.drawLine(hex);
-            if (lines.anyMatch(line -> !line.anyMatch(
-                    c -> !grid.getHexagon(c).isPresent() || hexagonAttributes.blocksView(grid.getHexagon(c).get())))) {
+    public Set<C> getVisibleHexagons() {
+        Set<C> visibleHexagons = new HashSet<>();
+        Set<C> withinRange = grid.getCoordinatesWithinRange(coordinate, range);
+        for (C hex : withinRange) {
+            Stream<Stream<Coordinate>> lines = coordinate.drawLine(hex);
+            if (lines.anyMatch(line -> !line.anyMatch(c -> !grid.getCoordinate(c).isPresent()
+                    || coordinateAttributes.blocksView(grid.getCoordinate(c).get())))) {
                 visibleHexagons.add(hex);
             }
         }

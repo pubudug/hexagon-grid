@@ -1,13 +1,9 @@
 package io.github.pubudug.hexgrid;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-
 import static java.lang.Math.abs;
-import static java.lang.Math.round;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static java.lang.Math.round;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -15,7 +11,10 @@ import java.util.Set;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-@Getter(value = AccessLevel.PROTECTED)
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+
+@Getter
 @EqualsAndHashCode
 public class Coordinate {
     private int cubeX;
@@ -67,7 +66,7 @@ public class Coordinate {
         return new Coordinate(offsetColumn, offsetRow);
     }
 
-    protected int getCubeY() {
+    public int getCubeY() {
         return -cubeX - cubeZ;
     }
 
