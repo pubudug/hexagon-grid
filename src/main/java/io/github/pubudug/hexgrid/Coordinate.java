@@ -20,7 +20,7 @@ public class Coordinate {
     private int cubeX;
     private int cubeZ;
 
-    Coordinate(Coordinate coordinate) {
+    protected Coordinate(Coordinate coordinate) {
         this.cubeX = coordinate.cubeX;
         this.cubeZ = coordinate.cubeZ;
     }

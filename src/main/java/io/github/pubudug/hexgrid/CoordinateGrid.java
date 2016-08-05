@@ -44,7 +44,7 @@ public class CoordinateGrid<C extends Coordinate> {
         return result.stream().map(c -> coordinateFactory.create(c)).collect(Collectors.toSet());
     }
 
-    Stream<C> getCoordinates() {
+    public Stream<C> getCoordinates() {
         return Arrays.stream(coordinates).flatMap(row -> Arrays.stream(row).map(c -> c));
     }
 
